@@ -63,7 +63,7 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
 {
     // Default UIAppearance
     _bubbleViewColor = ATLBlueColor();
-    _bubbleViewCornerRadius = 17.0f;
+    _bubbleViewCornerRadius = 8.0f;
     
     _bubbleView = [[ATLMessageBubbleView alloc] init];
     _bubbleView.translatesAutoresizingMaskIntoConstraints = NO;

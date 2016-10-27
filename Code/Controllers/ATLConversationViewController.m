@@ -488,8 +488,20 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     if (!previousMessage.sentAt) return NO;
     
     NSDate *date = message.sentAt ?: [NSDate date];
-    NSTimeInterval interval = [date timeIntervalSinceDate:previousMessage.sentAt];
-    if (abs(interval) > self.dateDisplayTimeInterval) {
+    NSDate *previousDate = previousMessage.sentAt ?: [NSDate date];
+    
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:date];
+    NSDateComponents *previousComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:previousDate];
+
+    if(components.day != previousComponents.day) {
+        return YES;
+    }
+    
+    if(components.day == previousComponents.day && components.month != previousComponents.month) {
+        return YES;
+    }
+    
+    if(components.day == previousComponents.day && components.month == previousComponents.month && components.year != previousComponents.year) {
         return YES;
     }
     return NO;

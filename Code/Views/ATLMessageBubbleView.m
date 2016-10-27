@@ -25,7 +25,7 @@
 CGFloat const ATLMessageBubbleLabelVerticalPadding = 8.0f;
 CGFloat const ATLMessageBubbleLabelHorizontalPadding = 13.0f;
 CGFloat const ATLMessageBubbleLabelWidthMargin = 1.0f;
-CGFloat const ATLMessageBubbleLabelTimestampMargin = 50.0f;
+CGFloat const ATLMessageBubbleLabelTimestampMargin = 40.0f;
 
 CGFloat const ATLMessageBubbleMapWidth = 200.0f;
 CGFloat const ATLMessageBubbleMapHeight = 200.0f;
@@ -483,7 +483,7 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
 - (void)configureBubbleTimestampLabelConstraints
 {
     [self addConstraint:[NSLayoutConstraint constraintWithItem:_bubbleTimestampLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:-ATLMessageBubbleLabelVerticalPadding]];
-    NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:_bubbleTimestampLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-3.0];
+    NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:_bubbleTimestampLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-5.0];
     [self addConstraint:bottomConstraint];
 }
 
