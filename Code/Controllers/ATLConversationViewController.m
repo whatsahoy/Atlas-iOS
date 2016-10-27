@@ -431,6 +431,13 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     } else {
         [cell updateWithSender:nil];
     }
+    BOOL isOutgoing = [message.sender.userID isEqualToString:self.layerClient.authenticatedUser.userID];
+    
+    NSAttributedString *timeString = [self attributedStringForMessageTime:message forOutgoing:isOutgoing];
+    if(timeString) {
+        [cell updateTimeStampLabelWithAttributedText:timeString];
+    }
+    
     if (message.isUnread && [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive && self.marksMessagesAsRead) {
         [message markAsRead:nil];
     }
@@ -1119,6 +1126,18 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"ATLConversationViewControllerDataSource must return an attributed string for Date" userInfo:nil];
     }
     return dateString;
+}
+
+- (NSAttributedString *)attributedStringForMessageTime:(LYRMessage *)message forOutgoing:(BOOL)isOutgoing
+{
+    NSAttributedString *dateString;
+    if ([self.dataSource respondsToSelector:@selector(conversationViewController:attributedStringForDisplayOfTime:forOutgoingMessage:)]) {
+        NSDate *date = message.sentAt ?: [NSDate date];
+        NSAttributedString *dateString = [self.dataSource conversationViewController:self attributedStringForDisplayOfTime:date forOutgoingMessage:isOutgoing];
+        NSAssert([dateString isKindOfClass:[NSAttributedString class]], @"Date string must be an attributed string");
+        return dateString;
+    }
+    return nil;
 }
 
 - (NSAttributedString *)attributedStringForRecipientStatusOfMessage:(LYRMessage *)message

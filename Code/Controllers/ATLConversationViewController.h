@@ -126,6 +126,18 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSAttributedString *)conversationViewController:(ATLConversationViewController *)conversationViewController attributedStringForDisplayOfDate:(NSDate *)date;
 
 /**
+ @abstract Asks the data source for an `NSAttributedString` representation of a given date.
+ @param conversationViewController The `ATLConversationViewController` requesting the string.
+ @param date The `NSDate` object to be displayed as a string.
+ @return an `NSAttributedString` representing the given date.
+ @discussion The date string will be displayed in message bubbles at bottom right The date represents the `sentAt` date of a message object.
+ The string can be customized to appear in whichever format your application requires.
+ */
+- (NSAttributedString *)conversationViewController:(ATLConversationViewController *)conversationViewController attributedStringForDisplayOfTime:(NSDate *)time forOutgoingMessage:(BOOL)isOutgoing;
+
+
+
+/**
  @abstract Asks the data source for an `NSAttributedString` representation of a given `LYRRecipientStatus`.
  @param conversationViewController The `ATLConversationViewController` requesting the string.
  @param recipientStatus The `LYRRecipientStatus` object to be displayed as a question

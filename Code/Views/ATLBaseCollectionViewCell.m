@@ -75,6 +75,7 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
     _avatarImageView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:_avatarImageView];
     
+    
     [self configureLayoutConstraints];
 }
 
@@ -111,7 +112,6 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
 {
     self.message = message;
 }
-
 - (void)shouldDisplayAvatarItem:(BOOL)shouldDisplayAvatarItem
 {
     NSArray *constraints = [self.contentView constraints];
@@ -126,6 +126,10 @@ CGFloat const ATLAvatarImageTailPadding = 4.0f;
     }
     [self setNeedsUpdateConstraints];
     self.shouldDisplayAvatar = shouldDisplayAvatarItem;
+}
+
+- (void)updateTimeStampLabelWithAttributedText:(NSAttributedString *)attText {
+    [self.bubbleView updateTimeStampLabelWithAttributedText:attText];
 }
 
 - (void)updateWithSender:(id<ATLParticipant>)sender
