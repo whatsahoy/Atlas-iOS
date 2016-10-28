@@ -499,18 +499,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
         NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:date];
         NSDateComponents *previousComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:previousDate];
         
-        if(components.day != previousComponents.day) {
-            return YES;
-        }
-        
-        if(components.day == previousComponents.day && components.month != previousComponents.month) {
-            return YES;
-        }
-        
-        if(components.day == previousComponents.day && components.month == previousComponents.month && components.year != previousComponents.year) {
-            return YES;
-        }
-        return NO;
+        return components.day != previousComponents.day || components.month != previousComponents.month || components.year != previousComponents.year;
     } else {
         NSTimeInterval interval = [date timeIntervalSinceDate:previousMessage.sentAt];
         return abs(interval) > self.dateDisplayTimeInterval;
