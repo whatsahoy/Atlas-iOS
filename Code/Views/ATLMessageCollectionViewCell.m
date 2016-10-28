@@ -109,7 +109,13 @@ NSInteger const kATLSharedCellTag = 1000;
 {
     self.message = message;
     LYRMessagePart *messagePart = message.parts.firstObject;
-    [self updateBubbleWidth:[[self class] cellSizeForMessage:self.message inView:nil].width];
+    CGFloat width = [[self class] cellSizeForMessage:self.message inView:nil].width;
+    
+    if(self.shouldDisplayTimeInMessages) {
+        width += ATLMessageBubbleLabelTimestampMargin;
+    }
+    
+    [self updateBubbleWidth:width];
     if ([self messageContainsTextContent]) {
         [self configureBubbleViewForTextContent];
     } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeImageJPEG]) {
@@ -437,7 +443,8 @@ NSInteger const kATLSharedCellTag = 1000;
         font = cell.messageTextFont;
     }
     CGSize size = ATLTextPlainSize(text, font);
-    size.width += ATLMessageBubbleLabelHorizontalPadding * 2 + ATLMessageBubbleLabelWidthMargin + ATLMessageBubbleLabelTimestampMargin;
+    size.width += ATLMessageBubbleLabelHorizontalPadding * 2 + ATLMessageBubbleLabelWidthMargin;
+    
     size.height += ATLMessageBubbleLabelVerticalPadding * 2;
     if (![[self sharedHeightCache] objectForKey:message.identifier]) {
         [[self sharedHeightCache] setObject:[NSValue valueWithCGSize:size] forKey:message.identifier];

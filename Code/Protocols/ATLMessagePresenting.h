@@ -45,9 +45,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)shouldDisplayAvatarItem:(BOOL)shouldDisplayAvatarItem;
 
 /**
- @abstract Tells the receiver to display timestamp.
+ @abstract Tells the receiver how to display timestamp.
  */
 - (void)updateTimeStampLabelWithAttributedText:(NSAttributedString*)attText;
+
+/**
+ @abstract Tells the receiver to display timestamp.
+ */
+- (void)shouldDisplayTimeInMessages:(BOOL)shouldDisplayTimeInMessages;
 
 
 @end

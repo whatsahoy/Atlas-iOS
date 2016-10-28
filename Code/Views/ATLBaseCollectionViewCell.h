@@ -47,6 +47,12 @@ extern CGFloat const ATLMessageCellHorizontalMargin;
  */
 @property (nonatomic) ATLAvatarImageView *avatarImageView;
 
+
+/**
+ @abstract Controls visibility of time in messages.
+ */
+@property (nonatomic, readonly) BOOL shouldDisplayTimeInMessages;
+
 /**
  @abstract The `LYRMessage` object passed in `ATLMessagePresenting` protocol `presentMessage:`.
  */
@@ -63,5 +69,10 @@ extern CGFloat const ATLMessageCellHorizontalMargin;
  right aligned and cells with `ATLIncomingCellType` will be left aligned.
  */
 - (void)configureCellForType:(ATLCellType)cellType;
+
+/**
+ @abstract Configures the visibility of time in messages.
+ */
+- (void)shouldDisplayTimeInMessages:(BOOL)shouldDisplayTimeInMessages;
 
 @end

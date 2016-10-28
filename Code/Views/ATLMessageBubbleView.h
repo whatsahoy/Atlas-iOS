@@ -50,9 +50,14 @@ extern NSString *const ATLUserDidTapPhoneNumberNotification;
 @interface ATLMessageBubbleView : UIView <UIAppearanceContainer>
 
 /**
- @abstract Tells the bubble view to display a timestamp.
+ @abstract Tells the bubble view how to display a timestamp.
  */
 - (void)updateTimeStampLabelWithAttributedText:(NSAttributedString*)attText;
+
+/**
+ @abstract Tells the bubble view to display a timestamp.
+ */
+- (void)shouldDisplayTimeInMessages:(BOOL)shouldDisplayTimeInMessages;
 
 /**
  @abstract Tells the bubble view to display a given string.
@@ -73,11 +78,6 @@ extern NSString *const ATLUserDidTapPhoneNumberNotification;
  @abstract Tells the bubble view to display a map image for a given location.
  */
 - (void)updateWithLocation:(CLLocationCoordinate2D)location;
-
-/**
- @abstract Tells the bubble view to display timestamp.
- */
-- (void)updateTimeStampLabelWithAttributedText:(NSAttributedString*)attText;
 
 /**
  @abstract Tells the bubble view to clear out the content and prepare it for reuse.

@@ -422,6 +422,10 @@ static NSInteger const ATLPhotoActionSheet = 1000;
  */
 - (void)configureCell:(UICollectionViewCell<ATLMessagePresenting> *)cell forMessage:(LYRMessage *)message indexPath:(NSIndexPath *)indexPath
 {
+    // Should display time needs to be before presentMessage
+    BOOL shouldDisplayTimeInMessages = [self shouldDisplayTimeInMessages];
+    [cell shouldDisplayTimeInMessages:shouldDisplayTimeInMessages];
+    
     [cell presentMessage:message];
     BOOL willDisplayAvatarItem = (![message.sender.userID isEqualToString:self.layerClient.authenticatedUser.userID]) ? self.shouldDisplayAvatarItem : (self.shouldDisplayAvatarItem && self.shouldDisplayAvatarItemForAuthenticatedUser);
     [cell shouldDisplayAvatarItem:willDisplayAvatarItem];
@@ -431,10 +435,11 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     } else {
         [cell updateWithSender:nil];
     }
-    BOOL isOutgoing = [message.sender.userID isEqualToString:self.layerClient.authenticatedUser.userID];
     
-    NSAttributedString *timeString = [self attributedStringForMessageTime:message forOutgoing:isOutgoing];
-    if(timeString) {
+    if(shouldDisplayTimeInMessages) {
+        BOOL isOutgoing = [message.sender.userID isEqualToString:self.layerClient.authenticatedUser.userID];
+        
+        NSAttributedString *timeString = [self attributedStringForMessageTime:message forOutgoing:isOutgoing];
         [cell updateTimeStampLabelWithAttributedText:timeString];
     }
     
@@ -490,21 +495,26 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     NSDate *date = message.sentAt ?: [NSDate date];
     NSDate *previousDate = previousMessage.sentAt ?: [NSDate date];
     
-    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:date];
-    NSDateComponents *previousComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:previousDate];
-
-    if(components.day != previousComponents.day) {
-        return YES;
+    if([self shouldDisplayTimeInMessages]) {
+        NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:date];
+        NSDateComponents *previousComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:previousDate];
+        
+        if(components.day != previousComponents.day) {
+            return YES;
+        }
+        
+        if(components.day == previousComponents.day && components.month != previousComponents.month) {
+            return YES;
+        }
+        
+        if(components.day == previousComponents.day && components.month == previousComponents.month && components.year != previousComponents.year) {
+            return YES;
+        }
+        return NO;
+    } else {
+        NSTimeInterval interval = [date timeIntervalSinceDate:previousMessage.sentAt];
+        return abs(interval) > self.dateDisplayTimeInterval;
     }
-    
-    if(components.day == previousComponents.day && components.month != previousComponents.month) {
-        return YES;
-    }
-    
-    if(components.day == previousComponents.day && components.month == previousComponents.month && components.year != previousComponents.year) {
-        return YES;
-    }
-    return NO;
 }
 
 - (BOOL)shouldDisplaySenderLabelForSection:(NSUInteger)section
@@ -1145,11 +1155,19 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     NSAttributedString *dateString;
     if ([self.dataSource respondsToSelector:@selector(conversationViewController:attributedStringForDisplayOfTime:forOutgoingMessage:)]) {
         NSDate *date = message.sentAt ?: [NSDate date];
-        NSAttributedString *dateString = [self.dataSource conversationViewController:self attributedStringForDisplayOfTime:date forOutgoingMessage:isOutgoing];
+        dateString = [self.dataSource conversationViewController:self attributedStringForDisplayOfTime:date forOutgoingMessage:isOutgoing];
         NSAssert([dateString isKindOfClass:[NSAttributedString class]], @"Date string must be an attributed string");
-        return dateString;
+    } else {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"ATLConversationViewControllerDataSource must return an attributed string for Date" userInfo:nil];
     }
-    return nil;
+    return dateString;
+}
+
+- (BOOL)shouldDisplayTimeInMessages {
+    if ([self.dataSource respondsToSelector:@selector(shouldDisplayTimeInMessages)]) {
+        return [self.dataSource shouldDisplayTimeInMessages];
+    }
+    return NO;
 }
 
 - (NSAttributedString *)attributedStringForRecipientStatusOfMessage:(LYRMessage *)message
