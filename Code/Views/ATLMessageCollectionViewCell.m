@@ -111,12 +111,15 @@ NSInteger const kATLSharedCellTag = 1000;
     LYRMessagePart *messagePart = message.parts.firstObject;
     CGFloat width = [[self class] cellSizeForMessage:self.message inView:nil].width;
     
-    if(self.shouldDisplayTimeInMessages) {
+    BOOL doesMessageContainTextContent = [self messageContainsTextContent];
+    
+    if(doesMessageContainTextContent && self.shouldDisplayTimeInMessages) {
         width += ATLMessageBubbleLabelTimestampMargin;
     }
     
     [self updateBubbleWidth:width];
-    if ([self messageContainsTextContent]) {
+    
+    if (doesMessageContainTextContent) {
         [self configureBubbleViewForTextContent];
     } else if ([messagePart.MIMEType isEqualToString:ATLMIMETypeImageJPEG]) {
         [self configureBubbleViewForImageContent];

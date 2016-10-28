@@ -85,15 +85,6 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
         [_bubbleViewLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh + 1 forAxis:UILayoutConstraintAxisHorizontal];
         [self addSubview:_bubbleViewLabel];
         
-        _bubbleTimestampLabel = [[UILabel alloc] init];
-        _bubbleTimestampLabel.font = [UIFont systemFontOfSize:8 weight:UIFontWeightThin];
-        _bubbleTimestampLabel.textAlignment = NSTextAlignmentRight;
-        _bubbleTimestampLabel.numberOfLines = 0;
-        _bubbleTimestampLabel.userInteractionEnabled = NO;
-        _bubbleTimestampLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        [_bubbleTimestampLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh + 1 forAxis:UILayoutConstraintAxisHorizontal];
-        [self addSubview:_bubbleTimestampLabel];
-        
         _textCheckingTypes = NSTextCheckingTypeLink | NSTextCheckingTypePhoneNumber;
         
         _bubbleImageView = [[UIImageView alloc] init];
@@ -106,6 +97,15 @@ typedef NS_ENUM(NSInteger, ATLBubbleViewContentType) {
         _playView.backgroundColor = [UIColor clearColor];
         _playView.hidden = YES;
         [self addSubview:_playView];
+        
+        _bubbleTimestampLabel = [[UILabel alloc] init];
+        _bubbleTimestampLabel.font = [UIFont systemFontOfSize:8 weight:UIFontWeightThin];
+        _bubbleTimestampLabel.textAlignment = NSTextAlignmentRight;
+        _bubbleTimestampLabel.numberOfLines = 0;
+        _bubbleTimestampLabel.userInteractionEnabled = NO;
+        _bubbleTimestampLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        [_bubbleTimestampLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultHigh + 1 forAxis:UILayoutConstraintAxisHorizontal];
+        [self addSubview:_bubbleTimestampLabel];
         
         _progressView = [[ATLProgressView alloc] initWithFrame:CGRectMake(0, 0, 128.0f, 128.0f)];
         _progressView.translatesAutoresizingMaskIntoConstraints = NO;
