@@ -1153,8 +1153,8 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 }
 
 - (BOOL)shouldDisplayTimeInMessages {
-    if ([self.dataSource respondsToSelector:@selector(shouldDisplayTimeInMessages)]) {
-        return [self.dataSource shouldDisplayTimeInMessages];
+    if ([self.dataSource respondsToSelector:@selector(conversationViewControllerShouldDisplayTimeInMessages:)]) {
+        return [self.dataSource conversationViewControllerShouldDisplayTimeInMessages:self];
     }
     return NO;
 }
