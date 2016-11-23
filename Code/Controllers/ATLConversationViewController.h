@@ -154,7 +154,7 @@ NS_ASSUME_NONNULL_BEGIN
  @discussion The date string will be displayed in message bubbles at bottom right.
 
  */
-- (BOOL)shouldDisplayTimeInMessages;
+- (BOOL)conversationViewControllerShouldDisplayTimeInMessages:(ATLConversationViewController *)conversationViewController;
 
 
 /**
