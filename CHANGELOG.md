@@ -1,9 +1,32 @@
 # Atlas Changelog
 
+## 1.0.33
+
+### Public API Changes
+
+* Added `shouldDisplayUsernameForOneOtherParticipant` as a configurable property to `ATLConversationViewController`.
+* `dateString` and `participantName` parameters marked as `nullable` within `ATLConversationCollectionViewHeader:headerHeightWithDateString:`.
+* Made the return value of `ATLConversationListViewController:avatarItemForConversation:` `nullable`.
+
+### Enhancements
+
+* Refactored queryController delegate methods to return early if the view is not visible. This helps harden against `NSInternalInconsistencyException` errors.
+* Refactored `ATLConversationListViewController` to track all changes from the queryController as they come in. Once the queryController finishes the changes, the tableView is updated. This helps harden against `NSInternalInconsistencyException` errors.
+* Changed all `@import LayerKit` to `#import <LayerKit/LayerKit.h>`
+* Refactored code to satisfy analyzer warnings.
+
+### Bug Fixes
+
+* `ATLConversationListViewController:configureCell:atIndexPath:` returns early if no conversation is found at `indexPath`.
+* Prevent `ATLAvatarImageView` from flickering when setting the same `remoteImageURL`'s image
+* Fixes a bug where the timestamp might incorrectly get overlaid across the message bubble.
+
 ## 1.0.32
 
 ### Bug Fixes
 
+* Fixed an issue in `ATLMessageInputToolbar` where creating a new line would incorrectly offset the text above until the next character was entered. This also fixed a crash that could happen if Return was pressed rapidly in succession. [APPS-2663]
+* Fixed a crash that could occur if the `tableFooterView` in the `ATLConversationListViewController` wasn't initialized. [APPS-2774]
 * Fixed an issue where pulling to load more messages in a conversations wouldn't work when it should
 
 ## 1.0.31

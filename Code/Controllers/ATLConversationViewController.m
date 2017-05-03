@@ -111,6 +111,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 {
     _dateDisplayTimeInterval = 60*60;
     _marksMessagesAsRead = YES;
+    _shouldDisplayUsernameForOneOtherParticipant = NO;
     _shouldDisplayAvatarItemForOneOtherParticipant = NO;
     _shouldDisplayAvatarItemForAuthenticatedUser = NO;
     _avatarItemDisplayFrequency = ATLAvatarItemDisplayFrequencySection;
@@ -465,9 +466,14 @@ static NSInteger const ATLPhotoActionSheet = 1000;
     header.message = message;
     if ([self shouldDisplayDateLabelForSection:indexPath.section]) {
         [header updateWithAttributedStringForDate:[self attributedStringForMessageDate:message]];
+    } else {
+        [header updateWithAttributedStringForDate:[[NSAttributedString alloc] initWithString:@"" attributes:nil]];
     }
+    
     if ([self shouldDisplaySenderLabelForSection:indexPath.section]) {
         [header updateWithParticipantName:[self participantNameForMessage:message]];
+    } else {
+        [header updateWithAttributedStringForDate:[[NSAttributedString alloc] initWithString:@"" attributes:nil]];
     }
 }
 
@@ -508,7 +514,7 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 
 - (BOOL)shouldDisplaySenderLabelForSection:(NSUInteger)section
 {
-    if (self.conversation.participants.count <= 2) return NO;
+    if (!self.shouldDisplayUsernameForOneOtherParticipant && self.conversation.participants.count <= 2) return NO;
     
     LYRMessage *message = [self.conversationDataSource messageAtCollectionViewSection:section];
     if ([message.sender.userID isEqualToString:self.layerClient.authenticatedUser.userID]) return NO;
@@ -1214,7 +1220,9 @@ static NSInteger const ATLPhotoActionSheet = 1000;
           forChangeType:(LYRQueryControllerChangeType)type
            newIndexPath:(NSIndexPath *)newIndexPath
 {
+    if (self.collectionView.window == nil) return;
     if (self.expandingPaginationWindow) return;
+    
     NSInteger currentIndex = indexPath ? [self.conversationDataSource collectionViewSectionForQueryControllerRow:indexPath.row] : NSNotFound;
     NSInteger newIndex = newIndexPath ? [self.conversationDataSource collectionViewSectionForQueryControllerRow:newIndexPath.row] : NSNotFound;
     [self.objectChanges addObject:[ATLDataSourceChange changeObjectWithType:type newIndex:newIndex currentIndex:currentIndex]];
@@ -1229,6 +1237,12 @@ static NSInteger const ATLPhotoActionSheet = 1000;
 {
     NSArray *objectChanges = [self.objectChanges copy];
     [self.objectChanges removeAllObjects];
+    
+    if (self.collectionView.window == nil) {
+        [self.collectionView reloadData];
+        [self.collectionView layoutIfNeeded];
+        return;
+    }
     
     if (self.expandingPaginationWindow) {
         self.expandingPaginationWindow = NO;
