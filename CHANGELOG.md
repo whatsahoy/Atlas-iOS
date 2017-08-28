@@ -1,5 +1,11 @@
 # Atlas Changelog
 
+## 1.1.2
+
+### Bug Fixes
+
+* Fixes a crash in `ATLMediaInputStream` when sending an image from the camera roll on iOS 11. [IOS-3225]
+
 ## 1.1.1
 
 ### Public API Changes
