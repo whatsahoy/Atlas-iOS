@@ -5,6 +5,7 @@
 ### Bug Fixes
 
 * Fixes a crash in `ATLMediaInputStream` when sending an image from the camera roll on iOS 11. [IOS-3225]
+* Fixes an issue where the text input and accessory buttons in the `ATLMessageInputToolbar` would not respond to tap actions on iOS 11.
 
 ## 1.1.1
 
